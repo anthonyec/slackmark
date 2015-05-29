@@ -28,6 +28,10 @@
 
 <% if (type == 'collection') { %>
 	<%= intro %>, a collection called *<%= name %>* has been created.
+<% } else if (type == 'text' || type == 'audio') { %>
+	<%= intro %>, someone added some *<%= type %>* to the *<%= collection_name %>* collection.
+<% } else if (type == 'other') { %>
+	<%= intro %>, someone added something or *<%= type %>* to the *<%= collection_name %>* collection.
 <% } else { %>
-	<%= intro %>, someone added a new *<%= type %>* to the *<%= collection_name %>* collection.
+	<%= intro %>, someone added a *<%= type %>* to the *<%= collection_name %>* collection.
 <% } %>
