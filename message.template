@@ -1,0 +1,33 @@
+<%
+	var phrases = [
+		'oh my',
+		'woah',
+		'jesus christ',
+		'man',
+		'wow',
+		'cool',
+		'nice',
+		'hey',
+		'guess what',
+		'well',
+		'what\'s up',
+		'ok so',
+		'interesting',
+		'oi oi',
+		'bloody hell',
+		'good news',
+		'stop what you are doing',
+		'attention',
+		'hmmm'
+	];
+
+	var intro = _.sample(phrases);
+
+	intro = intro.charAt(0).toUpperCase() + intro.slice(1);
+%>
+
+<% if (type == 'collection') { %>
+	<%= intro %>, a collection called *<%= name %>* has been created.
+<% } else { %>
+	<%= intro %>, someone added a new *<%= type %>* to the *<%= collection_name %>* collection.
+<% } %>

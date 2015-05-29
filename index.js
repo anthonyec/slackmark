@@ -1,86 +1,94 @@
+var config = require('./config.js');
+
 var fs = require('fs');
 var _ = require('underscore');
 var request = require('request');
+var moment = require('moment');
 
 // var url = 'http://signalnoise.dropmark.com/activity.json';
 var url = 'http://sites.local/_git/slackmark/activity.json';
-
-var ids = [];
+var lastTimestamp = 0;
 var hasInit = false;
 
-var credentials = {
-	username: '', 	// Username for dropmark
-	password: '', 	// Password for dropmark
-	token: '',		// Token for slack
-	channel: ''		// Slack channel
+var templates = {
+	message: _.template(fs.readFileSync('message.template', 'utf8')),
+	description: _.template(fs.readFileSync('description.template', 'utf8'))
 }
 
-// var message = {
-
-// };
-// _.reduce()
-
-// var requestTemplate = fs.readFileSync('request.template', 'utf8');
-
-// console.log(requestTemplate)
-
-var sendMessage = function(message) {
-	var url = 'https://slack.com/api/chat.postMessage?token=' + credentials.token + '&channel=' + credentials.channel + '&pretty=1';
+var sendMessage = function(item) {
+	var message = templates.message(item);
+	var description = templates.description(item);
+	var url = 'https://slack.com/api/chat.postMessage?token=' + config.token + '&channel=' + config.channel + '&pretty=1';
 
 	var attachments = [
         {
-            "fallback": "Required plain-text summary of the attachment.",
-            "color": "#36a64f",
-            "pretext": "Optional text that appears above the attachment block",
-            "author_name": "Bobby Tables",
-            "author_link": "http://flickr.com/bobby/",
-            "author_icon": "http://flickr.com/icons/bobby.jpg",
-            "title": "Slack API Documentation",
-            "title_link": "https://api.slack.com/",
-            "text": "Optional text that appears within the attachment",
-            "image_url": "http://my-website.com/path/to/image.jpg",
-            "thumb_url": "http://example.com/path/to/thumb.png"
+            "fallback": message,
+            "color": "#00dfdf",
+            "pretext": message,
+            "author_name": "",
+            "author_link": "",
+            "author_icon": "",
+            "title": item.name,
+            "title_link": item.link,
+            "text": description,
+            "image_url": item.thumbnail,
+            "thumb_url": item.thumbnail,
+            "mrkdwn_in": ["pretext"]
         }
     ];
+
+    // url += '&text=' + text;
+    // url += '&icon_url=http://anthonycossins.com/uploads/slackmark-' + Math.floor(Math.random() * 4) + '.png';
+    url += '&attachments=' + encodeURIComponent(JSON.stringify(attachments))
+    url += '&username=Slackmark';
+    url += '&icon_url=http://anthonycossins.com/uploads/slackmark.png';
+
+    request(url, function (error, response, body) {
+
+    });
 };
 
-var slackAlert = function(diffIds, json) {
-	console.log('Slack Alert!', diffIds);
+var slackAlert = function(items) {
+	console.log('Slack Alert!', items.length, 'new item(s)');
 
-	var items = _.filter(json, function(item) {
-		return _.contains(diffIds, item.id);
-	});
-
-	_.each(items, function(item) {
-		console.log(item.name);
-
-		sendMessage({
-
-		})
-	});
+	_.each(items, sendMessage);
 };
+
+var getMaxTimestamp = function(items) {
+	return _.chain(items)
+			.pluck('updated_at')
+			.map(function(date) {
+				return moment(date).format('x');
+			})
+			.max()
+			.value();
+}
 
 var checkActivity = function() {
 	request(url, function (error, response, body) {
 		if (error) return console.log('Error');
 
 		var json = JSON.parse(body);
-		var newIds = _.pluck(json, 'id');
-		var diffIds = _.difference(newIds, ids);
 
-		if (hasInit && !_.isEmpty(diffIds)) {
-			slackAlert(diffIds, json);
+		if (hasInit) {
+			var newItems = _.filter(json, function(item) {
+				return moment(item.updated_at).format('X') > lastTimestamp;
+			});
+
+			if (!_.isEmpty(newItems)) {
+				lastTimestamp = getMaxTimestamp(newItems);
+
+				slackAlert(newItems);
+			}
+		} else {
+			lastTimestamp = getMaxTimestamp(json);
 		}
 
-		ids = newIds;
-
 		setTimeout(function() {
-			checkActivity();
-
 			hasInit = true;
-		}, 1000)
-
-	}).auth(credentials.username, credentials.password, false);
+			checkActivity();
+		}, 1000);
+	}).auth(config.username, config.password, false);
 };
 
 checkActivity();
