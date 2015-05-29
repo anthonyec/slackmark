@@ -5,15 +5,22 @@ var _ = require('underscore');
 var request = require('request');
 var moment = require('moment');
 
+// Check every...
+var minutes = 5;
+
 // var url = 'http://signalnoise.dropmark.com/activity.json';
 var url = 'http://sites.local/_git/slackmark/activity.json';
 var lastTimestamp = 0;
 var hasInit = false;
 
-var templates = {
-	message: _.template(fs.readFileSync('message.template', 'utf8')),
-	description: _.template(fs.readFileSync('description.template', 'utf8'))
-}
+var templates = {};
+
+var getTemplates = function() {
+	return {
+		message: _.template(fs.readFileSync('message.template', 'utf8')),
+		description: _.template(fs.readFileSync('description.template', 'utf8'))
+	}
+};
 
 var sendMessage = function(item) {
 	var message = templates.message(item);
@@ -62,9 +69,11 @@ var getMaxTimestamp = function(items) {
 			})
 			.max()
 			.value();
-}
+};
 
 var checkActivity = function() {
+	templates = getTemplates();
+	
 	request(url, function (error, response, body) {
 		if (error) return console.log('Error');
 
@@ -87,7 +96,7 @@ var checkActivity = function() {
 		setTimeout(function() {
 			hasInit = true;
 			checkActivity();
-		}, 1000);
+		}, minutes * 60 * 1000);
 	}).auth(config.username, config.password, false);
 };
 
