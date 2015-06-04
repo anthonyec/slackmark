@@ -1,12 +1,13 @@
 {
   "name": "slackmark",
-  "version": "0.0.0",
-  "description": "",
+  "version": "1.0",
+  "description": "Slack notifications for Dropmark",
+  "repository": "https://github.com/Anthonyec/slackmark.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Anthony Cossins",
   "license": "ISC",
   "dependencies": {
     "underscore": "~1.8.3",
