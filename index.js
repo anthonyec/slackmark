@@ -70,7 +70,7 @@ var getMaxTimestamp = function(items) {
 };
 
 var checkActivity = function() {
-	console.log('Checking activity');
+	console.log(moment().format('MMMM Do YYYY, h:mm:ss a'), '-', 'Checking activity and loading templates');
 
 	try {
 		templates = getTemplates();
