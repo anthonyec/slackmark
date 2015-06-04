@@ -1,0 +1,111 @@
+<%
+	var phrases = [
+		'Oh my,',
+		'Woah!',
+		'Jesus christ,',
+		'Man,',
+		'Wow,',
+		'Cool,',
+		'Nice,',
+		'Hey,',
+		'Guess what?!',
+		'Well,',
+		'What\'s up?',
+		'Ok so',
+		'Interesting,',
+		'Oi oi!',
+		'Bloody hell!',
+		'Good news,',
+		'Stop what you are doing,',
+		'Attention!',
+		'Hmmm,',
+		'Stone the crows!',
+		'Blimey!',
+		'Wowzers,',
+		'Yo yo!',
+		'Word up,',
+		'Whoa!',
+		'Oh my days!',
+		'Jimmy Cricket!',
+		'Jimmeny Cricket!',
+		'Check it!',
+		'Tomorrows news today!',
+		'Oh shiiit!!',
+		'Holy cow!',
+		'Cripes!',
+		'Grapes!',
+		'Great Zeuses bow!',
+		'WOY!!!',
+		'Heck!',
+		'Bloody Nora!',
+		'Holy Smoke!',
+		'Toastie!',
+		'Guess what?!',
+		'Advance to go, collect £200.',
+		'Sheeeeeeeiiiit!',
+		'Surprise!',
+		'Hop to it!',
+		'Vunderbar!',
+		'Gordon Bennett!',
+		'Strewth!',
+		'My word!',
+		'By Gum!',
+		'Heavens Above!',
+		'Praise the Lord!',
+		'Shock Horror!',
+		'Strangely enough',
+		'The next thing I knew',
+		'Suddenly',
+		'Oi,',
+		'Jeez…',
+		'Well I’ll be a monkeys uncle!',
+		'For Pete’s sake!',
+		'Hot dog!',
+		'Holy moley!',
+		'Well I never!',
+		'Mama mia!',
+		'Sweet lemony Lincoln!',
+		'Am I dreaming?',
+		'Holy mackerel!',
+		'OMG!',
+		'Ooh!',
+		'Aaah!',
+		'Extra Extra, Read all about it!',
+		'Hey Mr!',
+		'Sacre Bleu!',
+		'Shizer!',
+		'Bonjour!',
+		'Überraschung!',
+		'Oh mummy!',
+		'Oh boy,',
+		'Fuck me!',
+		'Sweet Morgan Freeman!'
+	]
+
+	var intro = _.sample(phrases);
+
+	var returnFirstWord = function(phrase, word) {
+		var length = phrase.length;
+		var char = phrase[length - 1];
+
+		if (char == '!' || char == '.' || char == '?') {
+			return phrase + ' ' + word.charAt(0).toUpperCase() + word.slice(1);
+		} else {
+			return phrase + ' ' + word;
+		}
+	}
+%>
+
+<% if (type == 'collection') { %>
+	<%= returnFirstWord(intro, 'a') %> collection called *<%= name %>* has been created.
+
+<% } else if (type == 'text' || type == 'audio') { %>
+	<%= returnFirstWord(intro, 'someone') %> added some *<%= type %>* to the *<%= collection_name %>* collection.
+
+<% } else if (type == 'other') { %>
+	<%= returnFirstWord(intro, 'someone') %> added something or *<%= type %>* to the *<%= collection_name %>* collection.
+
+<% } else { %>
+	<%= returnFirstWord(intro, 'someone') %> added a *<%= type %>* to the *<%= collection_name %>* collection.
+
+<% } %>

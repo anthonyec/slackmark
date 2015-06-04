@@ -7,7 +7,7 @@ var moment = require('moment');
 
 var timeout;
 var url = 'http://signalnoise.dropmark.com/activity.json';
-// var url = 'http://sites.local/_git/slackmark/activity.json';
+// var url = 'http://sites.local/slackmark/planning/activity.json';
 var lastTimestamp = 0;
 var hasInit = false;
 
@@ -15,15 +15,15 @@ var templates = {};
 
 var getTemplates = function() {
 	return {
-		message: _.template(fs.readFileSync('message.template', 'utf8')),
-		description: _.template(fs.readFileSync('description.template', 'utf8'))
+		message: _.template(fs.readFileSync('./templates/message', 'utf8')),
+		description: _.template(fs.readFileSync('./templates/description', 'utf8'))
 	}
 };
 
 var sendMessage = function(item) {
 	var message = templates.message(item);
 	var description = templates.description(item);
-		var url = 'https://slack.com/api/chat.postMessage?token=' + config.token + '&channel=' + config.channel + '&pretty=1';
+	var url = 'https://slack.com/api/chat.postMessage?token=' + config.token + '&channel=' + config.channel + '&pretty=1';
 
 	var attachments = [
         {
@@ -61,7 +61,7 @@ var slackAlert = function(items) {
 
 var getMaxTimestamp = function(items) {
 	return _.chain(items)
-			.pluck('updated_at')
+			.pluck('created_at')
 			.map(function(date) {
 				return moment(date).format('x');
 			})
@@ -70,9 +70,14 @@ var getMaxTimestamp = function(items) {
 };
 
 var checkActivity = function() {
-	console.log('Checking activity and reloading templates');
+	console.log('Checking activity');
 
-	templates = getTemplates();
+	try {
+		templates = getTemplates();
+	} catch(e) {
+		console.log('Error loading templates');
+		return;
+	}
 	
 	request(url, function (error, response, body) {
 		if (error) return console.log('Error requesting activity!');
@@ -81,7 +86,7 @@ var checkActivity = function() {
 
 		if (hasInit) {
 			var newItems = _.filter(json, function(item) {
-				return moment(item.updated_at).format('X') > lastTimestamp;
+				return moment(item.created_at).format('X') > lastTimestamp;
 			});
 
 			if (!_.isEmpty(newItems)) {
