@@ -1,8 +1,8 @@
-# Slackmark - Slack notifications for Dropmark
+# Slackmark - Slack notifications for Dropmark ![Image of a cutie](http://anthonycossins.com/uploads/slackmark.png)
 
 Slackmark is a node server that checks Dropmark every so often and posts to a Slack channel of your choice when there's something new.
 
-![Image of a cutie](http://anthonycossins.com/uploads/slackmark.png)
+
 
 ## Setup
 Create a file called config.js at the root and fill in the details:
