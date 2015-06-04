@@ -1,5 +1,6 @@
-# slackmark
-Slack notifications for Dropmark
+# Slackmark - Slack notifications for Dropmark
+
+Slackmark is a node server that checks Dropmark every so often and posts to a Slack channel of your choice when there's something new.
 
 ## Setup
 Create a file called config.js at the root and fill in the details:
@@ -38,3 +39,10 @@ config [key] [value] - Edit the config at runtime.
 
 ## HELP SLACKMARK BOT TOOK OVER AND IS ON A MURDEROUS RAMPAGE!!
 Hold CTRL/CMD + C to terminate index.js
+
+## Todo
+- Crop thumbnails so they are nice and big and not super tall
+- Rewrite the whole thing so it's more organised
+- Add ablity to add filters for specific item attributes (e.g if someone adds a video type then post to the video channel in slack)
+- Add broken thumbnail detection (probably more effort than it's worth)
+- Cron job those timeouts maybe (part of rewrite)
