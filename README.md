@@ -43,4 +43,6 @@ Hold CTRL/CMD + C to terminate index.js
 ## Todo
 - Crop thumbnails so they are nice and big and not super tall
 - Rewrite the whole thing so it's more organised
+- Add ablity to add filters for specific item attributes (e.g if someone adds a video type then post to the video channel in slack)
+- Add broken thumbnail detection (probably more effort than it's worth)
 - Cron job those timeouts maybe (part of rewrite)
