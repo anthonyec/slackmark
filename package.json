@@ -1,6 +1,6 @@
 {
   "name": "slackmark",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Slack notifications for Dropmark",
   "repository": "https://github.com/Anthonyec/slackmark.git",
   "main": "index.js",
@@ -16,6 +16,9 @@
     "easyimage": "~2.0.3",
     "debug": "~2.2.0",
     "async": "~1.1.0",
-    "nconf": "~0.7.1"
+    "nconf": "~0.7.1",
+    "async-q": "~0.2.2",
+    "q": "~1.4.1",
+    "slack-node": "~0.1.3"
   }
 }

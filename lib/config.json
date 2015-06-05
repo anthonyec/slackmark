@@ -1,0 +1,20 @@
+{
+	"dropmark": {
+		"username": "",
+		"password": ""
+	},
+
+	"slack": {
+		"token": "",
+		"channel": ""
+	},
+
+	"crop": {
+		"src": "./cache/thumbnail.png",
+		"dst": "./cache/cropped.png",
+		"width": 600,
+		"cropwidth": 600,
+		"cropheight": 420,
+		"gravity": "North"
+	}
+}
